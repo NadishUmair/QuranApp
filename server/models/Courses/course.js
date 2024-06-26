@@ -1,7 +1,15 @@
 const mongoose=require("mongoose");
 
 const CourseSchema=new mongoose.Schema({
-    courseName:"String"
+    courseName:String,
+    assignments:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'assignment'
+    }],
+    quizes:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"quize"
+    }],
 })
 
 const CourseModel=new mongoose.model("course",CourseSchema);

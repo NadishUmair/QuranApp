@@ -1,8 +1,17 @@
-const mongoose=require('mongoose');
- const Schema=mongoose("Schema")
+const mongoose=require("mongoose");
+const {Schema}=require('mongoose');
 const AssignemntSchema=new Schema({
-    asssignmentNme:String;
+    assignmentTopic:String,
+    assignmentQuestion:String,
+    course:{
+        type:Schema.Types.ObjectId,
+        ref:"course"
+    },
+    assignmnetAttemptBy:[{
+        type:Schema.Types.ObjectId,
+        ref:"students"
+    }]
 })
 
-const AssignmmentModel=new mongoose.model("assignment",AssignemntSchema);
+const AssignmmentModel= mongoose.model("assignment",AssignemntSchema);
 module.exports=AssignmmentModel;
