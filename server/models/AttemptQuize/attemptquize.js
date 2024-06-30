@@ -1,7 +1,7 @@
 const mongoose=require("mongoose");
 const {Schema}=require('mongoose');
-const QuizeAtpSchema=new Schema({
-    quizeAnswer:String,
+const quizAtpSchema=new Schema({
+    quizAnswer:String,
     attemptBy:{
         type:Schema.Types.ObjectId,
         ref:"students"
@@ -13,5 +13,5 @@ const QuizeAtpSchema=new Schema({
 
 })
 
-const QuizeAtpModel=new mongoose.model("quizeatpm",QuizeAtpSchema);
-module.exports=QuizeAtpModel;
+const QuizAtpModel=new mongoose.model("quizatpm",quizAtpSchema);
+module.exports=QuizAtpModel;

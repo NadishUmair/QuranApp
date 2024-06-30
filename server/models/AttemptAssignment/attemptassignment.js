@@ -6,7 +6,7 @@ const AssignmentAtpSchema=new Schema({
         type:Schema.Types.ObjectId,
         ref:"students"
     },
-    quiz:{
+    assignment:{
         type:Schema.Types.ObjectId,
         ref:"assignments"
     },
