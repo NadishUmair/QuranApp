@@ -29,13 +29,14 @@ exports.Attemptquiz = async (req, res) => {
 exports.getAllQuizAttemps=(async(req,res)=>{
     console.log("hy")
     try {
-        const allQuizAttempts=await QuizAtpModel.find().populate("attemptBy");
+        const allQuizAttempts=await QuizAtpModel.find().populate(["attemptBy"]);
         console.log(allQuizAttempts);
         res.status(200).json({
             success:true,
             message:"All Quizes Attempts",
             allQuizAttempts
         })
+      
     } catch (error) {
         res.status(500).json({error})
     }
