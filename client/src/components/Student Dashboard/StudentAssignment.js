@@ -92,7 +92,7 @@ const StudentAssignment = () => {
 }
 
 
-console.log(Assignments);
+
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-green-500 text-white  w-[20%] h-full fixed">

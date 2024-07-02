@@ -42,7 +42,7 @@ const Dashboard = () => {
 useEffect(()=>{
   fecthcourses();
 },[])
-console.log(Courses);
+
   const handleLogout = () => {
     dispatch(logoutUser());
    
