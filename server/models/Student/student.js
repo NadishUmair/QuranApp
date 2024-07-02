@@ -11,6 +11,7 @@ const StudentSchema=new mongoose.Schema({
     score:Number,
     cnicNo:Number,
     password:String,
+    dateOfBirth:String,
     quiz:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'quiz'

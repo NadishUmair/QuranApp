@@ -44,3 +44,14 @@ exports.AddAssignment=(async(req,res)=>{
    }
 })
 
+exports.AllAssignments=(async(req,res)=>{
+    try {
+        const allassignments=await AssignmmentModel.find().populate('course');
+        res.status(200).json({
+            success:true,
+            allassignments
+        })
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+    })

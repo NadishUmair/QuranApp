@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { CiUser, CiLock } from "react-icons/ci";
 import { AiOutlineEye } from "react-icons/ai";
+import { useDispatch} from 'react-redux';
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-
+import { loginUser } from '.././components/redux/action';
 const Login = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -32,15 +33,17 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/users/userlogin",
+        "http://localhost:8080/api/users/studentlogin",
         data
       );
-      toast.success("Successfully logged in");
-      navigate("/Dashboard");
+      const userfound=response.data.user;
+     
+     
       console.log(response);
-      const dataget = response.data.finduser;
-      localStorage.setItem("logeduser", JSON.stringify(dataget));
-      console.log(dataget);
+      dispatch(loginUser(userfound));
+      toast.success(response.data.message);
+       navigate("/Dashboard");
+    
     } catch (error) {
       setError("Problem in Logging in");
       toast.error("Problem in Logging in");

@@ -12,7 +12,6 @@ const Signup = () => {
     lastName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [error, setError] = useState("");
@@ -63,16 +62,12 @@ const Signup = () => {
     setValidEmail(true);
 
     try {
-      await axios.post("http://localhost:8080/api/users/signup", data);
-      toast.success("Successfully signed up!");
+      // const response= await axios.post("http://localhost:8080/api/users/studentsignup",data);
+      // console.log(response);
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data.message);
-      } else {
-        setError("An error occurred. Please try again.");
-      }
-      toast.error("Signup failed. Please try again.");
+      console.log(error)
     }
+   
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { CiMoneyCheck1 } from "react-icons/ci";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import { IoChevronBackSharp } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import axios from "axios";
 
 const Assignments = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -21,7 +22,23 @@ const Assignments = () => {
     text: "",
     grade: "",
   });
-
+  const [Assignments,setAssignments]=useState();
+  const fecthAssignmnets=async()=>{
+    try {
+      const response=await axios.get("http://localhost:8080/api/users/allassignmnets")
+      setAssignments(response.data.allassignments)
+    } catch (error) {
+      
+    }
+    }
+  
+  useEffect(()=>{
+    fecthAssignmnets();
+  },[])
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+}
   const assignments = [
     {
       name: "Assignment 1: Surah Ibrahim",
@@ -197,13 +214,13 @@ const Assignments = () => {
             <div className="text-xl w-[30%]">Title</div>
             <div className="text-xl w-[30%]">Action</div>
           </div>
-          {assignments.map((item, index) => (
+          {Assignments?.map((item, index) => (
             <div
               className="flex flex-wrap my-2 border-b py-2 border-white"
               key={index}
             >
-              <div className="w-[30%]">{item.dateCreated}</div>
-              <div className="w-[30%]">{item.name}</div>
+              <div className="w-[30%]">{formatDate(item.createdAt)}</div>
+              <div className="w-[30%]">{item.assignmentTopic}</div>
               <div className="lg:w-[30%] lg:flex lg:flex-wrap lg:gap-4">
                 <div className="hover:underline flex flex-wrap gap-1">
                   <MdDeleteOutline className="mt-1" />

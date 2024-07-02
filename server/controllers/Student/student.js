@@ -16,6 +16,7 @@ const {
     education,
     score,
     cnicNo,
+    dateOfBirth
    
 }=req.body;
 console.log(password);
@@ -39,6 +40,7 @@ try {
     education,
     score,
     cnicNo,
+    dateOfBirth,
     password:hashedpassword
 
 
@@ -56,6 +58,55 @@ try {
     
 }
 
+exports.StudentLogin=async(req,res)=>{
+ 
+  const {email,password}=req.body;
+  console.log(req.body)
+  try {
+      const user=await StudentModel.findOne({email})
+      if(!user){
+          return res.status(404).json({
+              success:false,
+              msg:"user not found"
+          })
+      }
+      console.log(user);
+       const matchpassowrd= bcrypt.compare(password,user.password);
+       console.log("passowrd matched",matchpassowrd);
+       if(!matchpassowrd){
+          return res.status(409).json({
+              success:false,
+              msg:'Password not matched'
+          })
+       }
+      
+      res.status(200).json({
+          success:true,
+          message:"User loged in Successfully",
+          user
+      })
+  } catch (error) {
+      res.status(500).send({message:error.message})
+  }
+}
+
+exports.GetSingleStudent=async(req,res)=>{
+    const userId=req.params.id;
+
+  try {
+    const user=await StudentModel.findById({_id:userId});
+
+    res.status.json({
+      success:true,
+      user
+    })
+  } catch (error) {
+    res.status(500).json({
+      message:error.message
+    })
+  }
+}
+
 exports.updateStudent=async(req,res)=>{
     console.log(req.body);
       const {_id}=req.body;
@@ -64,7 +115,6 @@ exports.updateStudent=async(req,res)=>{
           
               const user=await StudentModel.findByIdAndUpdate(_id,body,{new:true})
         
-              await user.save();
             res.status(200).json({
                 success:true,
                 msg:"User Update Successfuly",

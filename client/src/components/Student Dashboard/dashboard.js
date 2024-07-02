@@ -13,10 +13,15 @@ import { FaHome } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useFetcher, useNavigate } from "react-router-dom";
 import Login from "../login";
-
+import {  useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/action";
+import axios from "axios";
 const Dashboard = () => {
+  const [Courses,setCoures]=useState();
+  const dispatch=useDispatch();
+  const user = useSelector((state) => state.custom.user);
   const navigate = useNavigate();
   const [userData, setuserData] = useState();
   useEffect(() => {
@@ -24,19 +29,29 @@ const Dashboard = () => {
     const user = JSON.parse(data);
     setuserData(user);
   }, []);
-  console.log(userData);
+  
+  const fecthcourses=async()=>{
+  try {
+    const response=await axios.get("http://localhost:8080/api/users/allcourses")
+    setCoures(response.data.allcourses)
+  } catch (error) {
+    
+  }
+  }
 
-  // if (!userData) {
-  //   return <Login />;
-  // }
-
+useEffect(()=>{
+  fecthcourses();
+},[])
+console.log(Courses);
   const handleLogout = () => {
-    console.log("Logging out...");
-    localStorage.removeItem("logeduser");
-    console.log("User data removed from localStorage.");
+    dispatch(logoutUser());
+   
     navigate("/");
   };
-
+  const capitalizeFirstLetterOfEachWord = (string) => {
+    if (!string) return "";
+    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-[#7194f3] text-white  w-[20%] h-full fixed">
@@ -75,13 +90,13 @@ const Dashboard = () => {
       <div className=" w-[80%] p-3 ml-[20%] ">
         <div className=" lg:mr-[5%] flex flex-wrap justify-end">
           <div className=" bg-slate-300 rounded-xl  lg:ml-[70%] text-lg text-center flex flex-wrap justify-center gap-2 py-2 ">
-            <h1>{userData?.firstName}</h1>
+            <h1>{user?.firstName}</h1>
             <FaRegUserCircle className="mt-1" />
           </div>
         </div>
         <div className="lg:h-40 lg:w-[90%] sm:w-full m-2 p-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg text-white">
           <h1 className="text-4xl mb-1">
-            Welcome Back, {userData?.firstName} !
+            Welcome Back, {user?.firstName} !
           </h1>
           <h2 className="text-lg mb-1">
             You Have complete 40% percent of Your Course !
@@ -125,13 +140,19 @@ const Dashboard = () => {
               <div className="sm:w-full bg-teal-600 rounded-lg p-1 lg:w-[70%] md:w-[60%]">
                 <h1 className="text-2xl font-medium">My courses</h1>
                 <div className="flex flex-wrap gap-3">
-                  <h2>Course 1</h2>
-                  <input type="Range" />
+                  { Courses?.map((item)=>{
+                    return(
+
+                    <div>
+                       <h1>{capitalizeFirstLetterOfEachWord(item.courseName)}</h1>
+                    </div>
+                    )
+                  })
+
+                  }
+                  
                 </div>
-                <div className=" flex flex-wrap gap-3">
-                  <h2>Course 2</h2>
-                  <input type="Range" />
-                </div>
+               
                 <div className="flex flex-wrap justify-center text-xl text-center gap-1 p-2">
                   <div className="px-2 border-r-2 border-white">
                     <h2>2</h2>

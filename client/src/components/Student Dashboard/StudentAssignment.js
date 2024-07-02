@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import axios from "axios";
 
 const FeedbackModal = ({ feedback, onClose }) => {
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-5 rounded-lg max-w-md w-full">
@@ -24,6 +26,19 @@ const FeedbackModal = ({ feedback, onClose }) => {
 };
 
 const StudentAssignment = () => {
+  const [Assignments,setAssignments]=useState();
+  const fecthAssignmnets=async()=>{
+    try {
+      const response=await axios.get("http://localhost:8080/api/users/allassignmnets")
+      setAssignments(response.data.allassignments)
+    } catch (error) {
+      
+    }
+    }
+  
+  useEffect(()=>{
+    fecthAssignmnets();
+  },[])
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const assignmentHistory = [
@@ -71,7 +86,13 @@ const StudentAssignment = () => {
   const closeFeedbackModal = () => {
     setSelectedFeedback(null);
   };
+  const capitalizeFirstLetterOfEachWord = (string) => {
+    if (!string) return "";
+    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
 
+
+console.log(Assignments);
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-green-500 text-white  w-[20%] h-full fixed">
@@ -110,14 +131,29 @@ const StudentAssignment = () => {
         <h1 className="text-2xl text-green-800">Assignments</h1>
         <div className="bg-green-500 p-2 flex flex-wrap item-center mb-2 text-white">
           <div className=" w-[70%]">
-            <h1 className="text-2xl mb-2">Current Assignment</h1>
-            <h2>Deadline: 5/11/2023 11:59pm </h2>
-            <h2>Total Marks: 10xp</h2>
-            <h2>Course Name: Seerah Course</h2>
-          </div>
-          <button className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300">
+            {
+                Assignments?.map((item)=>{
+                  return(
+                    
+                    <div className="flex justify-between" >
+                <div className="">
+                        <h1>Subject:{capitalizeFirstLetterOfEachWord(item.course.courseName)}</h1>
+                    
+                      <h2>Topic:{capitalizeFirstLetterOfEachWord(item.assignmentTopic)}</h2>
+                      <h2>Question:{item.assignmentQuestion}</h2>
+                      </div>
+           <div>
+           <button className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300">
             Attempt
           </button>
+           </div>
+                   
+                    </div>
+                  )
+                })
+            }
+          </div>
+         
         </div>
         <div className=" p-2">
           <h1 className="text-green-500 text-2xl">Previous Assignments</h1>

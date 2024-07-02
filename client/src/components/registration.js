@@ -20,7 +20,6 @@ const Registration = () => {
     email: "",
     phone: "",
     password: "",
-    confirmPassword: "",
     dateOfBirth: "",
     gender: "",
     course: "",
@@ -75,15 +74,12 @@ const Registration = () => {
     setValidEmail(true);
 
     try {
-      await axios.post("http://localhost:8080/api/users/signup", formData);
-      toast.success("Successfully signed up!");
+    const response=  await axios.post("http://localhost:8080/api/users/studentsignup", formData);
+      toast.success(response.data.message);
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data.message);
-      } else {
-        setError("An error occurred. Please try again.");
-      }
-      toast.error("Signup failed. Please try again.");
+      
+        console.log(error);
+        toast.error(error.response.data.message);
     }
   };
   return (

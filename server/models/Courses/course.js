@@ -1,16 +1,17 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
+const { Schema } = require('mongoose');
 
-const CourseSchema=new mongoose.Schema({
-    courseName:String,
-    assignments:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'assignment'
+const CourseSchema = new Schema({
+    courseName: String,
+    assignments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'assignment'
     }],
-    quizes:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"quize"
+    quizes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "quize"
     }],
-})
+});
 
-const CourseModel=new mongoose.model("course",CourseSchema);
-module.exports=CourseModel;
+const CourseModel = new mongoose.model("course", CourseSchema);
+module.exports = CourseModel;

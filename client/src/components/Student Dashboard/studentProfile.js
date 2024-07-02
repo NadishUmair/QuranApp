@@ -4,8 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
-
+import {  useDispatch, useSelector } from "react-redux";
+import {loginUser} from '../redux/action'
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const StudentProfile = () => {
+  const dispatch=useDispatch();
+  const user = useSelector((state) => state.custom.user);
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     firstName: "",
@@ -14,17 +20,14 @@ const StudentProfile = () => {
     email: "",
     phone: "",
     course: "",
+    _id:user._id
   });
   const [editMode, setEditMode] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
-    const data = localStorage.getItem("logeduser");
-    if (data) {
-      const user = JSON.parse(data);
-      setUserData(user);
-    }
+  setUserData(user);
   }, []);
 
   const handleLogout = () => {
@@ -34,41 +37,28 @@ const StudentProfile = () => {
     navigate("/");
   };
 
-  const handleEdit = () => {
-    setEditMode(true);
+  const handleEdit = async() => {
+    try {
+      const response=await axios.post("http://localhost:8080/api/users/updatepersonaldata",userData);
+      console.log(response);
+      const userfound=response.data.user;
+      dispatch(loginUser(userfound))
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
+      toast.success(error.response.data.message);
+    }
   };
 
-  const handleSave = () => {
-    // Prepare the data to send to the backend
-    const updatedUserData = {
-      ...userData,
-      password,
-      confirmPassword,
-    };
+  const handleSave = async () => {
+  
+ 
 
     // Make a POST request to your backend API endpoint
-    fetch("http://localhost:8080/api/users/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedUserData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Response from server:", data);
-        // Update localStorage with the latest user data if needed
-        localStorage.setItem("logeduser", JSON.stringify(data));
-        setUserData(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+ 
+     
+    
+     
 
     setEditMode(false);
   };
@@ -82,6 +72,10 @@ const StudentProfile = () => {
   };
 
   return (
+    <>
+  
+    
+   
     <div className="flex flex-wrap h-[100vh]">
       <div className="bg-[#7194f3] text-white w-[20%] h-full fixed">
         <div className="text-2xl font-bold p-2 flex flex-wrap">
@@ -128,7 +122,7 @@ const StudentProfile = () => {
                 value={userData.firstName}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+               
               />
             </div>
             <div>
@@ -141,7 +135,7 @@ const StudentProfile = () => {
                 value={userData.lastName}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+               
               />
             </div>
             <div>
@@ -154,7 +148,7 @@ const StudentProfile = () => {
                 value={userData.dateOfBirth}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+              
               />
             </div>
             <div>
@@ -167,7 +161,7 @@ const StudentProfile = () => {
                 value={userData.email}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+                
               />
             </div>
             <div>
@@ -180,7 +174,7 @@ const StudentProfile = () => {
                 value={userData.phone}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+               
               />
             </div>
             <div>
@@ -193,7 +187,7 @@ const StudentProfile = () => {
                 value={userData.course}
                 onChange={handleChange}
                 className="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:border-blue-500"
-                readOnly={!editMode}
+                
               />
             </div>
             {editMode && (
@@ -253,6 +247,8 @@ const StudentProfile = () => {
         </div>
       </div>
     </div>
+    <ToastContainer />
+    </>
   );
 };
 

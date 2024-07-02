@@ -11,6 +11,8 @@ const QuizeSchema=new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"course"
     }
+},{
+    timestamps:true
 })
 
 const QuizeModel= mongoose.model("quize",QuizeSchema);

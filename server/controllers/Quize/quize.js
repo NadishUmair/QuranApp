@@ -34,3 +34,15 @@ exports.AddQuize=(async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 })
+
+exports.AllQuizes=(async(req,res)=>{
+    try {
+        const allQuizes=await QuizeModel.find().populate('course');
+        res.status(200).json({
+            success:true,
+            allQuizes
+        })
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+    })
