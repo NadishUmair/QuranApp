@@ -29,7 +29,7 @@ exports.Attemptassignment = async (req, res) => {
 
 exports.GetAllassignmentAttemps=(async(req,res)=>{
     try {
-        cconsole.log("hy")
+      
         const allassignmentAttempts=await AssignmentAtpModel.find().populate("attemptBy","assignment");
      console.log(allassignmentAttempts);
         res.status(200).json({

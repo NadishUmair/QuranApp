@@ -27,7 +27,7 @@ exports.Attemptquiz = async (req, res) => {
 };
 
 exports.getAllQuizAttemps=(async(req,res)=>{
-    console.log("hy")
+  
     try {
         const allQuizAttempts=await QuizAtpModel.find().populate(["attemptBy"]);
         console.log(allQuizAttempts);

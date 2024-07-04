@@ -108,7 +108,6 @@ exports.GetSingleStudent=async(req,res)=>{
 }
 
 exports.updateStudent=async(req,res)=>{
-    console.log(req.body);
       const {_id}=req.body;
       const body=req.body;
       try {
