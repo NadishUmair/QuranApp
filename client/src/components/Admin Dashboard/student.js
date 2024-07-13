@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AdminStudent = () => {
   const [students, setStudents] = useState([]);
   const [form, setForm] = useState({
-    id: null,
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     dob: "",
-    course: "",
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -20,33 +20,57 @@ const AdminStudent = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.id) {
-      setStudents(
-        students.map((student) => (student.id === form.id ? form : student))
-      );
-    } else {
-      setStudents([...students, { id: Date.now(), ...form }]);
+    try {
+      const { data } = await axios.post("http://localhost:8080/api/users/studentsignup", form);
+      toast.success(data.message);
+
+      // Update students state with the new student
+      setStudents((prevStudents) => [
+        ...prevStudents,
+        { ...form, _id: data.studentId }, // Assuming the response includes the new student's ID
+      ]);
+
+      // Reset form
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        dob: "",
+      });
+    } catch (error) {
+      toast.error(error.response.data.message);
     }
-    setForm({
-      id: null,
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      dob: "",
-      course: "",
-    });
   };
+
+  const getStudents = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:8080/api/users/allstudents");
+      setStudents(data.AllStudents);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getStudents();
+  }, []);
 
   const editStudent = (student) => {
     setForm(student);
   };
 
-  const deleteStudent = (id) => {
-    const updatedStudents = students.filter((student) => student.id !== id);
-    setStudents(updatedStudents);
+  const deleteStudent = async (id) => {
+    try {
+      const { data } = await axios.delete(`http://localhost:8080/api/users/deletestudent/${id}`);
+      setStudents((prevStudents) => prevStudents.filter((item) => item._id !== id));
+      toast.success(data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in deleting Student");
+    }
   };
 
   return (
@@ -132,15 +156,6 @@ const AdminStudent = () => {
                 required
                 className="p-2 border border-gray-300 rounded-md"
               />
-              <input
-                type="text"
-                name="course"
-                value={form.course}
-                onChange={handleChange}
-                placeholder="Course"
-                required
-                className="p-2 border border-gray-300 rounded-md"
-              />
             </div>
             <button
               type="submit"
@@ -158,18 +173,16 @@ const AdminStudent = () => {
                   <th className="p-2 border-b">Last Name</th>
                   <th className="p-2 border-b">Email</th>
                   <th className="p-2 border-b">Date of Birth</th>
-                  <th className="p-2 border-b">Course</th>
                   <th className="p-2 border-b">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {students.map((student) => (
-                  <tr key={student.id} className="hover:bg-gray-50">
+                  <tr key={student._id} className="hover:bg-gray-50">
                     <td className="p-2 border-b">{student.firstName}</td>
                     <td className="p-2 border-b">{student.lastName}</td>
                     <td className="p-2 border-b">{student.email}</td>
                     <td className="p-2 border-b">{student.dob}</td>
-                    <td className="p-2 border-b">{student.course}</td>
                     <td className="p-2 border-b space-x-2">
                       <button
                         onClick={() => editStudent(student)}
@@ -178,7 +191,7 @@ const AdminStudent = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => deleteStudent(student.id)}
+                        onClick={() => deleteStudent(student._id)}
                         className="p-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
                       >
                         Delete

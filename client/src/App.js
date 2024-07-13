@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/home";
 import TeacherDashboard from "./components/Teacher's Dasboard/TeacherDashboard";
 import QuranStreaks from "./components/Student Dashboard/Qstreaks";
@@ -56,6 +58,7 @@ function App() {
           <Route path="/profile" element={<AdminProfile />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer/>
     </>
   );
 }

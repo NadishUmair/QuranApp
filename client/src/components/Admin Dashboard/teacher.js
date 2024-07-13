@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AdminTeacher = () => {
   const [teachers, setTeachers] = useState([]);
@@ -18,25 +20,42 @@ const AdminTeacher = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.id) {
-      setTeachers(
-        teachers.map((teacher) => (teacher.id === form.id ? form : teacher))
-      );
-    } else {
-      setTeachers([...teachers, { id: Date.now(), ...form }]);
+    console.log(form);
+    try {
+      // cosnt data=await axios.post("http://")
+    } catch (error) {
+      
     }
-    setForm({ id: null, name: "", email: "", course: "", password: "" });
   };
+
+  const getTeachers = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:8080/api/users/allteachers");
+      setTeachers(data.AllTeachers);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getTeachers();
+  }, []);
 
   const editTeacher = (teacher) => {
     setForm(teacher);
   };
 
-  const deleteTeacher = (id) => {
-    const updatedTeachers = teachers.filter((teacher) => teacher.id !== id);
-    setTeachers(updatedTeachers);
+  const deleteTeacher = async (id) => {
+    try {
+      const { data } = await axios.delete(`http://localhost:8080/api/users/deleteteacher/${id}`);
+      setTeachers((prevTeachers) => prevTeachers.filter((item) => item.id !== id));
+      toast.success(data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error("Error in deleting Teacher");
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -45,7 +64,7 @@ const AdminTeacher = () => {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-50 bg-black">
-      <div className="lg:w-[60%] w-full h-full p-2 mx-2 bg-white rounded-lg shadow-lg">
+      <div className="lg:w-[80%] w-full h-full p-2 mx-2 bg-white rounded-lg shadow-lg">
         <Link to="/admin" className="text-gray-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +127,7 @@ const AdminTeacher = () => {
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 px-3 py-2 focus:outline-none"
+                  className="absolute inset-y-0 right-0 px-3 py-2"
                 >
                   {showPassword ? (
                     <FaRegEyeSlash className="h-6 w-6 text-gray-500" />

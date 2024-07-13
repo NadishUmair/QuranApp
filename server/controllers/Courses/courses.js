@@ -3,6 +3,7 @@
 const CourseModel = require("../../models/Courses/course");
 
 exports.AddCourse=(async(req,res)=>{
+    console.log(req.body);
     const {courseName}=req.body;
     const course=courseName.toLowerCase();
     try {
@@ -20,10 +21,11 @@ exports.AddCourse=(async(req,res)=>{
         await newCourse.save();
         res.status(200).json({
             success:true,
-            message:"Course Added Succesffuly"
+            message:"Course Added Succesffuly",
+            newCourse
         })
     } catch (error) {
-        res.status(500).send("internal server error",error)
+        res.status(500).json({message:error.message})
     }
 })
 
@@ -38,3 +40,19 @@ try {
     res.status(500).json({message:error.message})
 }
 })
+
+exports.DeleteCourse=async(req,res)=>{
+    const id=req.params.id;
+    try {
+        const Course=await CourseModel.findByIdAndDelete(id);
+        res.status(200).json({
+            success:true,
+            message:"Course Deleted Successfully",
+            Course
+        })
+    } catch (error) {
+        res.status(500).json({
+            message:error.message
+        })
+    }
+}

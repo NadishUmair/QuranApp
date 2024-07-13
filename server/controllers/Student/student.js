@@ -49,7 +49,8 @@ try {
     await SaveUser.save();
     res.status(200).json({
         success:true,
-        message:"Signup Successffully"
+        message:"Signup Successffully",
+        SaveUser
     })
 
 } catch (error) {
@@ -219,4 +220,31 @@ exports.updateStudent=async(req,res)=>{
     }
   };
   
-  
+exports.AllStudents=async(req,res)=>{
+  try {
+     const AllStudents=await StudentModel.find();
+     res.status(200).json({
+      success:true,
+      message:"All Student",
+      AllStudents
+     })
+  } catch (error) {
+    res.status(500).json({message:error.message});
+  }
+}
+
+exports.DeleteStudent=async(req,res)=>{
+  const id=req.params.id;
+  try {
+      const student=await StudentModel.findByIdAndDelete(id);
+      res.status(200).json({
+          success:true,
+          message:"Student Deleted Successfully",
+          student
+      })
+  } catch (error) {
+      res.status(500).json({
+          message:error.message
+      })
+  }
+}
