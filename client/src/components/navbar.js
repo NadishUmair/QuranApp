@@ -82,6 +82,9 @@ const NavBar = () => {
               <li>
                 <Link to="/TeacherDashboard">Teacher Dashboard</Link>
               </li>
+              <li>
+                <Link to="/admin">Admin Dashboard</Link>
+              </li>
             </ul>
           </div>
         </div>

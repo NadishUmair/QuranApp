@@ -13,14 +13,13 @@ import { FaHome } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { Link, useFetcher, useNavigate } from "react-router-dom";
-import Login from "../login";
-import {  useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/action";
 import axios from "axios";
 const Dashboard = () => {
-  const [Courses,setCoures]=useState();
-  const dispatch=useDispatch();
+  const [Courses, setCoures] = useState();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.custom.user);
   const navigate = useNavigate();
   const [userData, setuserData] = useState();
@@ -29,29 +28,32 @@ const Dashboard = () => {
     const user = JSON.parse(data);
     setuserData(user);
   }, []);
-  
-  const fecthcourses=async()=>{
-  try {
-    const response=await axios.get("http://localhost:8080/api/users/allcourses")
-    setCoures(response.data.allcourses)
-  } catch (error) {
-    
-  }
-  }
 
-useEffect(()=>{
-  fecthcourses();
-},[])
+  const fecthcourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/users/allcourses"
+      );
+      setCoures(response.data.allcourses);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fecthcourses();
+  }, []);
 
   const handleLogout = () => {
     dispatch(logoutUser());
-   
+
     navigate("/");
   };
   const capitalizeFirstLetterOfEachWord = (string) => {
     if (!string) return "";
-    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
+    return string
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-[#7194f3] text-white  w-[20%] h-full fixed">
@@ -95,9 +97,7 @@ useEffect(()=>{
           </div>
         </div>
         <div className="lg:h-40 lg:w-[90%] sm:w-full m-2 p-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg text-white">
-          <h1 className="text-4xl mb-1">
-            Welcome Back, {user?.firstName} !
-          </h1>
+          <h1 className="text-4xl mb-1">Welcome Back, {user?.firstName} !</h1>
           <h2 className="text-lg mb-1">
             You Have complete 40% percent of Your Course !
           </h2>
@@ -140,19 +140,17 @@ useEffect(()=>{
               <div className="sm:w-full bg-teal-600 rounded-lg p-1 lg:w-[70%] md:w-[60%]">
                 <h1 className="text-2xl font-medium">My courses</h1>
                 <div className="flex flex-wrap gap-3">
-                  { Courses?.map((item)=>{
-                    return(
-
-                    <div>
-                       <h1>{capitalizeFirstLetterOfEachWord(item.courseName)}</h1>
-                    </div>
-                    )
-                  })
-
-                  }
-                  
+                  {Courses?.map((item) => {
+                    return (
+                      <div>
+                        <h1>
+                          {capitalizeFirstLetterOfEachWord(item.courseName)}
+                        </h1>
+                      </div>
+                    );
+                  })}
                 </div>
-               
+
                 <div className="flex flex-wrap justify-center text-xl text-center gap-1 p-2">
                   <div className="px-2 border-r-2 border-white">
                     <h2>2</h2>
