@@ -1,11 +1,11 @@
 const express=require("express");
 const bcrypt=require("bcrypt");
-const StudentModel = require("../../models/Student/student");
+const AuthModel = require("../../models/Autrh/auth");
 const generateOtp=()=>{
     return Math.floor(10000 + Math.random() * 900000).toString();
   }
-exports.StudentSignup=async(req,res)=>{
-    console.log(req.body);
+exports.AuthSignup=async(req,res)=>{
+
 const {
     firstName,
     lastName,
@@ -23,7 +23,7 @@ console.log(password);
 const hashedpassword= await bcrypt.hash(password,10);
     console.log(hashedpassword);
 try {
-    const findSimilar=await StudentModel.findOne({email});
+    const findSimilar=await AuthModel.findOne({email});
     if(findSimilar){
         return res.status(409).json({
             success:false,
@@ -31,7 +31,7 @@ try {
         })
     }
     
-    const SaveUser=new StudentModel({
+    const SaveUser=new AuthModel({
     firstName,
     lastName,
     email,
@@ -59,12 +59,12 @@ try {
     
 }
 
-exports.StudentLogin=async(req,res)=>{
+exports.AuthLogin=async(req,res)=>{
  
   const {email,password}=req.body;
   console.log(req.body)
   try {
-      const user=await StudentModel.findOne({email})
+      const user=await AuthModel.findOne({email})
       if(!user){
           return res.status(404).json({
               success:false,
@@ -91,11 +91,11 @@ exports.StudentLogin=async(req,res)=>{
   }
 }
 
-exports.GetSingleStudent=async(req,res)=>{
+exports.GetSingleAuth=async(req,res)=>{
     const userId=req.params.id;
 
   try {
-    const user=await StudentModel.findById({_id:userId});
+    const user=await AuthModel.findById({_id:userId});
 
     res.status.json({
       success:true,
@@ -108,12 +108,12 @@ exports.GetSingleStudent=async(req,res)=>{
   }
 }
 
-exports.updateStudent=async(req,res)=>{
+exports.updateAuth=async(req,res)=>{
       const {_id}=req.body;
       const body=req.body;
       try {
           
-              const user=await StudentModel.findByIdAndUpdate(_id,body,{new:true})
+              const user=await AuthModel.findByIdAndUpdate(_id,body,{new:true})
         
             res.status(200).json({
                 success:true,
@@ -128,7 +128,7 @@ exports.updateStudent=async(req,res)=>{
   exports.forgotPassword=async(req,res)=>{
      const {email}=req.body;
     try {
-      const finduser=await StudentModel.findOne({email});
+      const finduser=await AuthModel.findOne({email});
       if(!finduser){
         return res.status(404).json({
           success: false,
@@ -160,7 +160,7 @@ exports.updateStudent=async(req,res)=>{
     const { email } = req.body.email;
   
     try {
-      const finduser = await StudentModel.findOne({ email });
+      const finduser = await AuthModel.findOne({ email });
       if (!finduser || finduser.forgetPasswordOtp !== otp || finduser.forgetPasswordOtpExpiry < Date.now()) {
         return res.status(404).json({
           success: false,
@@ -185,7 +185,7 @@ exports.updateStudent=async(req,res)=>{
     const { userdata: { password: newPassword }, email: { email } } = req.body;
   
     try {
-      const finduser = await StudentModel.findOne({ email });
+      const finduser = await AuthModel.findOne({ email });
   
       if (!finduser) {
         return res.status(404).json({
@@ -220,27 +220,27 @@ exports.updateStudent=async(req,res)=>{
     }
   };
   
-exports.AllStudents=async(req,res)=>{
+exports.AllAuths=async(req,res)=>{
   try {
-     const AllStudents=await StudentModel.find();
+     const AllAuths=await AuthModel.find();
      res.status(200).json({
       success:true,
-      message:"All Student",
-      AllStudents
+      message:"All Auth",
+      AllAuths
      })
   } catch (error) {
     res.status(500).json({message:error.message});
   }
 }
 
-exports.DeleteStudent=async(req,res)=>{
+exports.DeleteAuth=async(req,res)=>{
   const id=req.params.id;
   try {
-      const student=await StudentModel.findByIdAndDelete(id);
+      const Auth=await AuthModel.findByIdAndDelete(id);
       res.status(200).json({
           success:true,
-          message:"Student Deleted Successfully",
-          student
+          message:"Auth Deleted Successfully",
+          Auth
       })
   } catch (error) {
       res.status(500).json({

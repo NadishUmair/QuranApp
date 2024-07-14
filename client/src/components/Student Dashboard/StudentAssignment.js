@@ -137,7 +137,7 @@ const StudentAssignment = () => {
                     
                     <div className="flex justify-between" >
                 <div className="">
-                        <h1>Subject:{capitalizeFirstLetterOfEachWord(item.course.courseName)}</h1>
+                        <h1>Subject:{capitalizeFirstLetterOfEachWord(item.course?.courseName)}</h1>
                     
                       <h2>Topic:{capitalizeFirstLetterOfEachWord(item.assignmentTopic)}</h2>
                       <h2>Question:{item.assignmentQuestion}</h2>

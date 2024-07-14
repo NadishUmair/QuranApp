@@ -1,7 +1,7 @@
 
 const mongoose=require("mongoose");
 
-const StudentSchema=new mongoose.Schema({
+const AuthSchema=new mongoose.Schema({
     firstName:String,
     lastName:String,
     email:String,
@@ -32,5 +32,5 @@ const StudentSchema=new mongoose.Schema({
     timestamps:true
 })
 
-const StudentModel=mongoose.model("Student",StudentSchema);
-module.exports=StudentModel;
+const AuthModel=mongoose.model("Auth",AuthSchema);
+module.exports=AuthModel;

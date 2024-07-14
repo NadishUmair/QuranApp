@@ -1,5 +1,5 @@
 const AssignmentAtpModel = require("../../models/AttemptAssignment/attemptassignment");
-const { findById } = require("../../models/Student/student");
+const { findById } = require("../../models/Autrh/auth");
 
 
 exports.Attemptassignment = async (req, res) => {

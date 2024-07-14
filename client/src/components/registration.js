@@ -74,7 +74,7 @@ const Registration = () => {
     setValidEmail(true);
 
     try {
-    const response=  await axios.post("http://localhost:8080/api/users/studentsignup", formData);
+    const response=  await axios.post("http://localhost:8080/api/users/authsignup", formData);
       toast.success(response.data.message);
     } catch (error) {
       

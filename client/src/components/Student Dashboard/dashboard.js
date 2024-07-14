@@ -24,9 +24,12 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [userData, setuserData] = useState();
   useEffect(() => {
-    const data = localStorage.getItem("logeduser");
-    const user = JSON.parse(data);
+    // const data = localStorage.getItem("logeduser");
+    // const user = JSON.parse(data);
     setuserData(user);
+    if(!user){
+      navigate("/login")
+    }
   }, []);
 
   const fecthcourses = async () => {

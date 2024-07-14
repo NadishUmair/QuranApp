@@ -12,6 +12,7 @@ const AdminStudent = () => {
     email: "",
     password: "",
     dob: "",
+    role:"student"
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,16 +24,16 @@ const AdminStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:8080/api/users/studentsignup", form);
+      const { data } = await axios.post("http://localhost:8080/api/users/authsignup", form);
+      
       toast.success(data.message);
-
-      // Update students state with the new student
+     
       setStudents((prevStudents) => [
         ...prevStudents,
-        { ...form, _id: data.studentId }, // Assuming the response includes the new student's ID
+        { ...form, _id: data.studentId }, 
       ]);
 
-      // Reset form
+     
       setForm({
         firstName: "",
         lastName: "",
@@ -47,8 +48,9 @@ const AdminStudent = () => {
 
   const getStudents = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/users/allstudents");
-      setStudents(data.AllStudents);
+      const { data } = await axios.get("http://localhost:8080/api/users/allauths");
+      const students=data.AllAuths.filter((item)=>item.role === "student")
+      setStudents(students);
     } catch (error) {
       console.log(error);
     }
@@ -64,7 +66,7 @@ const AdminStudent = () => {
 
   const deleteStudent = async (id) => {
     try {
-      const { data } = await axios.delete(`http://localhost:8080/api/users/deletestudent/${id}`);
+      const { data } = await axios.delete(`http://localhost:8080/api/users/deleteauth/${id}`);
       setStudents((prevStudents) => prevStudents.filter((item) => item._id !== id));
       toast.success(data.message);
     } catch (error) {
@@ -177,7 +179,7 @@ const AdminStudent = () => {
                 </tr>
               </thead>
               <tbody>
-                {students.map((student) => (
+                {students?.map((student) => (
                   <tr key={student._id} className="hover:bg-gray-50">
                     <td className="p-2 border-b">{student.firstName}</td>
                     <td className="p-2 border-b">{student.lastName}</td>

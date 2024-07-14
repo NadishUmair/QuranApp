@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from '.././components/redux/action';
-const Login = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [data, setData] = useState({
@@ -33,26 +33,21 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/users/authlogin",
+        "http://localhost:8080/api/users/studentlogin",
         data
       );
       const userfound=response.data.user;
-       if(userfound.role === 'student'){
-        navigate("/Dashboard");
-       }else if(userfound.role === 'teacher'){
-        navigate("/TeacherDashboard");
-       }
+     
      
       console.log(response);
       dispatch(loginUser(userfound));
       toast.success(response.data.message);
-       
+       navigate("/Dashboard");
     
     } catch (error) {
       setError("Problem in Logging in");
       toast.error("Problem in Logging in");
     }
-    
   };
 
   return (
@@ -134,4 +129,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AdminLogin;

@@ -1,21 +1,27 @@
 const express = require("express");
 
-const { StudentSignup, updateStudent, ChangePassword, forgotPassword, StudentLogin, AllStudents, DeleteStudent } = require("../controllers/Student/student");
+const { AuthSignup, updateAuth, ChangePassword, forgotPassword, AuthLogin, AllAuths, DeleteAuth } = require("../controllers/Auth/auth");
 const { AddCourse, Allcourses, DeleteCourse } = require("../controllers/Courses/courses");
 const { AddAssignment, AllAssignments } = require("../controllers/Assignment/assignment");
 const { AddQuize, AllQuizes } = require("../controllers/Quize/quize");
 const { Attemptassignment, getAllassignmentAttemps, GetAllassignmentAttemps } = require("../controllers/AttemptAssignment/attemptassignment");
 const { Attemptquize, Attemptquiz, getAllQuizAttemps } = require("../controllers/AttemptQuize/attemptquize");
+// const { TeacherSignup, DeleteTeacher, AllTeachers } = require("../controllers/Teacher/teacher");
 const router = express.Router();
-router.post("/studentsignup",StudentSignup);
-router.post("/studentlogin",StudentLogin);
-router.get("/allstudents",AllStudents);
-router.post("/updatepersonaldata",updateStudent);
+router.post("/authsignup",AuthSignup);
+router.post("/authlogin",AuthLogin);
+router.get("/allauths",AllAuths);
+router.post("/updatepersonaldata",updateAuth);
 router.post("/forgotpassword",forgotPassword);
 router.patch("/changepassword",ChangePassword);
-router.delete("/deletestudent/:id",DeleteStudent);
+router.delete("/deleteAuth/:id",DeleteAuth);
 
 
+//Teacher Routes
+// router.post("/teachersignup",TeacherSignup);
+// router.delete("/deleteteacher",DeleteTeacher);
+// router.get("/allteachers",AllTeachers);
+// router.delete("/deleteteacher/:id",DeleteTeacher);
 //Course Routes
 
 router.post("/addcourse",AddCourse)

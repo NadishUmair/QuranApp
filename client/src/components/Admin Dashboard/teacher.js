@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 const AdminTeacher = () => {
   const [teachers, setTeachers] = useState([]);
   const [form, setForm] = useState({
-    id: null,
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
-    course: "",
     password: "",
+    role:"teacher"
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,21 +24,36 @@ const AdminTeacher = () => {
     e.preventDefault();
     console.log(form);
     try {
-      // cosnt data=await axios.post("http://")
+      const { data } = await axios.post("http://localhost:8080/api/users/authsignup", form);
+      toast.success(data.message);
+
+      setTeachers((prevTeachers) => [
+        ...prevTeachers,
+        { ...form, _id: data.teacherd }, 
+      ]);
+
+     
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        dob: "",
+      });
     } catch (error) {
-      
+      toast.error(error.response.data.message);
     }
   };
-
   const getTeachers = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/api/users/allteachers");
-      setTeachers(data.AllTeachers);
+      const  { data } = await axios.get("http://localhost:8080/api/users/allauths");
+      console.log(data);
+      const teachers=data.AllAuths.filter((item)=>item.role === "teacher")
+      setTeachers(teachers);
     } catch (error) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getTeachers();
   }, []);
@@ -49,8 +64,8 @@ const AdminTeacher = () => {
 
   const deleteTeacher = async (id) => {
     try {
-      const { data } = await axios.delete(`http://localhost:8080/api/users/deleteteacher/${id}`);
-      setTeachers((prevTeachers) => prevTeachers.filter((item) => item.id !== id));
+      const { data } = await axios.delete(`http://localhost:8080/api/users/deleteauth/${id}`);
+      setTeachers((prevTeachers) => prevTeachers.filter((item) => item._id !== id));
       toast.success(data.message);
     } catch (error) {
       console.log(error);
@@ -89,8 +104,8 @@ const AdminTeacher = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <input
                 type="text"
-                name="name"
-                value={form.name}
+                name="firstName"
+                value={form.firstName}
                 onChange={handleChange}
                 placeholder="Name"
                 required
@@ -107,10 +122,10 @@ const AdminTeacher = () => {
               />
               <input
                 type="text"
-                name="course"
-                value={form.course}
+                name=" phone"
+                value={form.phone}
                 onChange={handleChange}
-                placeholder="Course"
+                placeholder="phone"
                 required
                 className="p-2 border border-gray-300 rounded-md"
               />
@@ -151,16 +166,16 @@ const AdminTeacher = () => {
                 <tr className="bg-gray-100 text-left">
                   <th className="p-2 border-b">Name</th>
                   <th className="p-2 border-b">Email</th>
-                  <th className="p-2 border-b">Course</th>
+                  <th className="p-2 border-b"> phone</th>
                   <th className="p-2 border-b">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {teachers.map((teacher) => (
+                {teachers?.map((teacher) => (
                   <tr key={teacher.id} className="hover:bg-gray-50">
-                    <td className="p-2 border-b">{teacher.name}</td>
+                    <td className="p-2 border-b">{teacher.firstName}</td>
                     <td className="p-2 border-b">{teacher.email}</td>
-                    <td className="p-2 border-b">{teacher.course}</td>
+                    <td className="p-2 border-b">{teacher. phone}</td>
                     <td className="p-2 border-b space-x-2">
                       <button
                         onClick={() => editTeacher(teacher)}
@@ -169,7 +184,7 @@ const AdminTeacher = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => deleteTeacher(teacher.id)}
+                        onClick={() => deleteTeacher(teacher._id)}
                         className="p-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
                       >
                         Delete
