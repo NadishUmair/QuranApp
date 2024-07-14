@@ -23,6 +23,7 @@ const Registration = () => {
     dateOfBirth: "",
     gender: "",
     course: "",
+    role:"student"
   });
 
   const [passwordMatch, setPasswordMatch] = useState(true);

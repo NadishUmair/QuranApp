@@ -40,6 +40,7 @@ const AdminStudent = () => {
         email: "",
         password: "",
         dob: "",
+        role: "student" 
       });
     } catch (error) {
       toast.error(error.response.data.message);

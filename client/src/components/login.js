@@ -37,6 +37,7 @@ const Login = () => {
         data
       );
       const userfound=response.data.user;
+      console.log(userfound);
        if(userfound.role === 'student'){
         navigate("/Dashboard");
        }else if(userfound.role === 'teacher'){

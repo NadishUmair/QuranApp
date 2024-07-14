@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { IoChevronBackSharp } from "react-icons/io5";
 import { CiMoneyCheck1 } from "react-icons/ci";
@@ -7,20 +7,36 @@ import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { FaHome } from "react-icons/fa";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const TeacherQuiz = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showSubmissionDialog, setShowSubmissionDialog] = useState(false);
   const [showResponseDialog, setShowResponseDialog] = useState(false);
   const [newQuiz, setNewQuiz] = useState({
-    name: "",
+    quizeTopic: "",
     deadline: "",
-    BsQuestion: "",
+    quizeQuestion: "",
+    course:""
   });
   const [selectedResponse, setSelectedResponse] = useState({
     text: "",
     grade: "",
   });
+  const [courses,setCourses]=useState([]);
+  const fetchCourses=async()=>{
+    try {
+      const {data} = await axios.get("http://localhost:8080/api/users/allcourses");
+      console.log(data.allcourses);
+      setCourses(data.allcourses);
+    } catch (error) {
+       console.log(error);
+    }
+  }
+  useEffect(()=>{
+    fetchCourses();
+  },[])
 
   const quizzes = [
     { name: "Quiz 1", dateCreated: "3/5/2023" },
@@ -82,9 +98,15 @@ const TeacherQuiz = () => {
     setNewQuiz((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmitQuiz = () => {
-    console.log("New Quiz:", newQuiz);
-    // Logic to submit the new quiz goes here
+  const handleSubmitQuiz =async (e) => {
+   
+    e.preventDefault();
+    try {
+         const {data}=await axios.post("http://localhost:8080/api/users/addquize",newQuiz)
+         toast.success(data.message);
+        } catch (error) {
+       toast.error(error.message);
+    }
     handleCloseDialog();
   };
 
@@ -235,8 +257,8 @@ const TeacherQuiz = () => {
                 <label className="block text-lg mb-2">Quiz Name</label>
                 <input
                   type="text"
-                  name="name"
-                  value={newQuiz.name}
+                  name="quizeTopic"
+                  value={newQuiz.quizeTopic}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg"
                   placeholder="Enter quiz name"
@@ -253,10 +275,24 @@ const TeacherQuiz = () => {
                 />
               </div>
               <div className="mb-4">
+              <label className="block text-lg mb-2">Select Subject</label>
+             <select name="course" id="course" value={newQuiz.course}   onChange={handleInputChange}  className="w-full p-2 border rounded-lg">
+             <option value="" disabled selected>Select</option>
+              {courses?.map((item)=>{
+                return(
+                  
+                   
+                    <option value={item._id}>{item.courseName}</option>
+                  
+                )
+              })}
+             </select>
+              </div>
+              <div className="mb-4">
                 <label className="block text-lg mb-2">Question</label>
                 <textarea
-                  name="detail"
-                  value={newQuiz.detail}
+                  name="quizeQuestion"
+                  value={newQuiz.quizeQuestion}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg"
                   placeholder="Enter quiz details"

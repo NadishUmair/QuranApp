@@ -39,6 +39,7 @@ const AdminTeacher = () => {
         email: "",
         password: "",
         dob: "",
+        role:"teacher"
       });
     } catch (error) {
       toast.error(error.response.data.message);

@@ -27,7 +27,7 @@ const Dashboard = () => {
     // const data = localStorage.getItem("logeduser");
     // const user = JSON.parse(data);
     setuserData(user);
-    if(!user){
+    if(user.role !== "student"){
       navigate("/login")
     }
   }, []);

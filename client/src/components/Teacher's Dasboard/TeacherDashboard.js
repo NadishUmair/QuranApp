@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { MdOutlineQuiz } from "react-icons/md";
 import { MdAssignment } from "react-icons/md";
 import { BsFlower1 } from "react-icons/bs";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { FaRegQuestionCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
 
+import { logoutUser } from "../redux/action";
 const TeacherDashboard = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.custom.user);
+  useEffect(()=>{
+    if(user?.role !== "teacher"){
+      navigate("/login")
+    }
+  },[])
+  const handleLogout = () => {
+    dispatch(logoutUser());
+
+    navigate("/");
+  };
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-[#172285] text-white  w-[20%] h-full fixed">
@@ -34,7 +49,8 @@ const TeacherDashboard = () => {
             <FaBarsProgress className="mt-1" />
             Progress
           </div>
-          <div className="mb-2 text-lg flex flex-wrap gap-2  py-2 lg:px-4 md:px-4 md:mx-2 lg:mx-2 ml-1 border-b text-red-600  border-white hover-effect w-[80%]">
+          <div  onClick={handleLogout}
+          className="mb-2 text-lg flex flex-wrap gap-2  py-2 lg:px-4 md:px-4 md:mx-2 lg:mx-2 ml-1 border-b text-red-600  border-white hover-effect w-[80%]">
             <RiLogoutCircleLine className="mt-1" />
             Logout
           </div>
@@ -43,12 +59,12 @@ const TeacherDashboard = () => {
       <div className=" w-[80%] p-3 ml-[20%] ">
         <div className=" lg:mr-[5%] flex flex-wrap justify-end">
           <div className=" bg-slate-300 w-32 rounded-xl  lg:ml-[80%] text-lg text-center flex flex-wrap justify-center gap-2 p-2">
-            <h1>Username </h1>
+            <h1>{user?.firstName}</h1>
             <FaRegUserCircle className="mt-1" />
           </div>
         </div>
         <div className="lg:h-40 lg:w-[90%] sm:w-full m-2 p-10 bg-gradient-to-r from-purple-400 to-pink-400 rounded-lg text-white">
-          <h1 className="text-4xl mb-1">Welcome Back, Teacher !</h1>
+          <h1 className="text-4xl mb-1">Welcome Back, {user?.firstName} !</h1>
         </div>
         <div className="lg:gap-1 lg:justify-start lg:flex lg:flex-wrap sm:block md:flex md:flex-wrap md:justify-center md:gap-3 p-2 ">
           <Link to="/teacherslecture">

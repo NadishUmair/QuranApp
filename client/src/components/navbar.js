@@ -76,12 +76,12 @@ const NavBar = () => {
                   Contact
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/dashboard">Student Dashboard</Link>
               </li>
               <li>
                 <Link to="/TeacherDashboard">Teacher Dashboard</Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/admin">Admin Dashboard</Link>
               </li>

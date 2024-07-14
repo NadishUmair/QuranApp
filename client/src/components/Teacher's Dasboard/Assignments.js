@@ -8,21 +8,32 @@ import { FaRegUser } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Assignments = () => {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showSubmissionDialog, setShowSubmissionDialog] = useState(false);
   const [showResponseDialog, setShowResponseDialog] = useState(false);
   const [newAssignment, setNewAssignment] = useState({
-    name: "",
+    assignmentTopic: "",
     deadline: "",
-    detail: "",
+    assignmentQuestion: "",
   });
   const [selectedResponse, setSelectedResponse] = useState({
     text: "",
     grade: "",
   });
   const [Assignments,setAssignments]=useState();
+  const [courses,setCourses]=useState([]);
+  const fetchCourses=async()=>{
+    try {
+      const {data} = await axios.get("http://localhost:8080/api/users/allcourses");
+      console.log(data.allcourses);
+      setCourses(data.allcourses);
+    } catch (error) {
+       console.log(error);
+    }
+  }
   const fecthAssignmnets=async()=>{
     try {
       const response=await axios.get("http://localhost:8080/api/users/allassignmnets")
@@ -34,6 +45,7 @@ const Assignments = () => {
   
   useEffect(()=>{
     fecthAssignmnets();
+    fetchCourses();
   },[])
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -111,8 +123,15 @@ const Assignments = () => {
     setNewAssignment((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmitAssignment = () => {
+  const handleSubmitAssignment = async (e) => {
+    e.preventDefault();
     console.log("New Assignment:", newAssignment);
+    try {
+         const {data}=await axios.post("http://localhost:8080/api/users/addassignment",newAssignment)
+         toast.success(data.message);
+        } catch (error) {
+       toast.error(error.message);
+    }
     // Logic to submit the new assignment goes here
     handleCloseDialog();
   };
@@ -266,12 +285,26 @@ const Assignments = () => {
                 <label className="block text-lg mb-2">Assignment Name</label>
                 <input
                   type="text"
-                  name="name"
-                  value={newAssignment.name}
+                  name="assignmentTopic"
+                  value={newAssignment.assignmentTopic}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg"
                   placeholder="Enter assignment name"
                 />
+              </div>
+              <div className="mb-4">
+              <label className="block text-lg mb-2">Select Subject</label>
+             <select name="course" id="course" value={newAssignment.course}   onChange={handleInputChange}  className="w-full p-2 border rounded-lg">
+             <option value="" disabled selected>Select</option>
+              {courses?.map((item)=>{
+                return(
+                  
+                   
+                    <option value={item._id}>{item.courseName}</option>
+                  
+                )
+              })}
+             </select>
               </div>
               <div className="mb-4">
                 <label className="block text-lg mb-2">Deadline Time</label>
@@ -286,8 +319,8 @@ const Assignments = () => {
               <div className="mb-4">
                 <label className="block text-lg mb-2">Assignment Detail</label>
                 <textarea
-                  name="detail"
-                  value={newAssignment.detail}
+                  name="assignmentQuestion"
+                  value={newAssignment.assignmentQuestion}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-lg"
                   placeholder="Enter assignment details"
