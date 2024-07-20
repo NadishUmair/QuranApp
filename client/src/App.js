@@ -26,6 +26,9 @@ import AdminTeacher from "./components/Admin Dashboard/teacher";
 import AdminStudent from "./components/Admin Dashboard/student";
 import AdminCourse from "./components/Admin Dashboard/courses";
 import AdminProfile from "./components/Admin Dashboard/profile";
+import AttemptAssignment from "./components/Student Dashboard/attemptAssignment";
+import AttemptQuiz from "./components/Student Dashboard/attemptquiz";
+import AdminLogin from "./components/Admin Dashboard/adminlogin";
 
 function App() {
   return (
@@ -51,14 +54,17 @@ function App() {
           <Route path="studentqna" element={<StudentQna />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/studentprofile" element={<StudentProfile />} />
-          <Route path="/admin" element={<AdminDashbaord />} />
+          <Route path="/admindashboard" element={<AdminDashbaord />} />
+          <Route path="/adminlogin" element={<AdminLogin />} />
           <Route path="/teacher" element={<AdminTeacher />} />
           <Route path="/student" element={<AdminStudent />} />
           <Route path="/courses" element={<AdminCourse />} />
           <Route path="/profile" element={<AdminProfile />} />
+          <Route path="/attemptassignment" element={<AttemptAssignment />} />
+          <Route path="/attemptquiz" element={<AttemptQuiz />} />
         </Routes>
       </BrowserRouter>
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }

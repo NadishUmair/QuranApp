@@ -5,7 +5,7 @@ import { useDispatch} from 'react-redux';
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from '.././components/redux/action';
+import { loginUser } from "../redux/action";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const AdminLogin = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/users/studentlogin",
+        "http://localhost:8080/api/users/adminlogin",
         data
       );
       const userfound=response.data.user;
@@ -42,7 +42,7 @@ const AdminLogin = () => {
       console.log(response);
       dispatch(loginUser(userfound));
       toast.success(response.data.message);
-       navigate("/Dashboard");
+       navigate("/AdminDashboard");
     
     } catch (error) {
       setError("Problem in Logging in");
@@ -86,7 +86,7 @@ const AdminLogin = () => {
           </button>
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6">Login</h1>
+        <h1 className="text-3xl font-bold mb-6">Admin Login</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center space-x-2">
             <CiUser className="text-2xl" />

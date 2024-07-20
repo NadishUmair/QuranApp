@@ -79,7 +79,7 @@ const AdminStudent = () => {
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-50 bg-black">
       <div className="lg:w-[80%] w-full h-full p-2 mx-2 bg-white rounded-lg shadow-lg">
-        <Link to="/admin" className="text-gray-500">
+        <Link to="/admindashboard" className="text-gray-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 cursor-pointer"

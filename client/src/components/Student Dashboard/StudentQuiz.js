@@ -26,19 +26,19 @@ const FeedbackModal = ({ feedback, onClose }) => {
 
 const StudentQuiz = () => {
   const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [Quizes,setQuizes]=useState();
-  const fecthQuizes=async()=>{
+  const [Quizes, setQuizes] = useState();
+  const fecthQuizes = async () => {
     try {
-      const response=await axios.get("http://localhost:8080/api/users/allquizes")
-      setQuizes(response.data.allQuizes)
-    } catch (error) {
-      
-    }
-    }
-  
-  useEffect(()=>{
+      const response = await axios.get(
+        "http://localhost:8080/api/users/allquizes"
+      );
+      setQuizes(response.data.allQuizes);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
     fecthQuizes();
-  },[])
+  }, []);
   const quizHistory = [
     {
       date: "2024-05-28",
@@ -86,8 +86,11 @@ const StudentQuiz = () => {
   };
   const capitalizeFirstLetterOfEachWord = (string) => {
     if (!string) return "";
-    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
+    return string
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   return (
     <div className="flex flex-wrap h-[100vh] ">
       <div className="bg-blue-600 text-white  w-[20%] h-full fixed">
@@ -126,26 +129,32 @@ const StudentQuiz = () => {
         <h1 className="text-2xl text-blue-800">Quizzes</h1>
         <div className="bg-blue-500 p-2 flex flex-wrap item-center mb-2 text-white">
           <div className=" w-[70%]">
-            {Quizes?.map((item)=>{
-              return(
-                <div className="flex justify-between" >
-                <div className="">
-                        <h1>Subject:{capitalizeFirstLetterOfEachWord(item.course?.courseName)}</h1>
-                    
-                      <h2>Topic:{capitalizeFirstLetterOfEachWord(item.quizeTopic)}</h2>
-                      <h2>Question:{item.quizeQuestion}</h2>
-                      </div>
-           <div>
-           <button className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300">
-            Attempt
-          </button>
-           </div>
-                   
-                    </div>
-              )
+            {Quizes?.map((item) => {
+              return (
+                <div className="flex justify-between">
+                  <div className="">
+                    <h1>
+                      Subject:
+                      {capitalizeFirstLetterOfEachWord(item.course?.courseName)}
+                    </h1>
+
+                    <h2>
+                      Topic:{capitalizeFirstLetterOfEachWord(item.quizeTopic)}
+                    </h2>
+                    <h2>Question:{item.quizeQuestion}</h2>
+                  </div>
+                  <div>
+                    <Link
+                      to="/attemptquiz"
+                      className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300"
+                    >
+                      Attempt
+                    </Link>
+                  </div>
+                </div>
+              );
             })}
           </div>
-          
         </div>
         <div className=" p-2">
           <h1 className="text-blue-600 text-2xl">Previous Quizzes</h1>

@@ -8,7 +8,6 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import axios from "axios";
 
 const FeedbackModal = ({ feedback, onClose }) => {
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-5 rounded-lg max-w-md w-full">
@@ -26,19 +25,19 @@ const FeedbackModal = ({ feedback, onClose }) => {
 };
 
 const StudentAssignment = () => {
-  const [Assignments,setAssignments]=useState();
-  const fecthAssignmnets=async()=>{
+  const [Assignments, setAssignments] = useState();
+  const fecthAssignmnets = async () => {
     try {
-      const response=await axios.get("http://localhost:8080/api/users/allassignmnets")
-      setAssignments(response.data.allassignments)
-    } catch (error) {
-      
-    }
-    }
-  
-  useEffect(()=>{
+      const response = await axios.get(
+        "http://localhost:8080/api/users/allassignmnets"
+      );
+      setAssignments(response.data.allassignments);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
     fecthAssignmnets();
-  },[])
+  }, []);
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
   const assignmentHistory = [
@@ -88,10 +87,11 @@ const StudentAssignment = () => {
   };
   const capitalizeFirstLetterOfEachWord = (string) => {
     if (!string) return "";
-    return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-}
-
-
+    return string
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   return (
     <div className="flex flex-wrap h-[100vh] ">
@@ -131,29 +131,33 @@ const StudentAssignment = () => {
         <h1 className="text-2xl text-green-800">Assignments</h1>
         <div className="bg-green-500 p-2 flex flex-wrap item-center mb-2 text-white">
           <div className=" w-[70%]">
-            {
-                Assignments?.map((item)=>{
-                  return(
-                    
-                    <div className="flex justify-between" >
-                <div className="">
-                        <h1>Subject:{capitalizeFirstLetterOfEachWord(item.course?.courseName)}</h1>
-                    
-                      <h2>Topic:{capitalizeFirstLetterOfEachWord(item.assignmentTopic)}</h2>
-                      <h2>Question:{item.assignmentQuestion}</h2>
-                      </div>
-           <div>
-           <button className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300">
-            Attempt
-          </button>
-           </div>
-                   
-                    </div>
-                  )
-                })
-            }
+            {Assignments?.map((item) => {
+              return (
+                <div className="flex justify-between">
+                  <div className="">
+                    <h1>
+                      Subject:
+                      {capitalizeFirstLetterOfEachWord(item.course?.courseName)}
+                    </h1>
+
+                    <h2>
+                      Topic:
+                      {capitalizeFirstLetterOfEachWord(item.assignmentTopic)}
+                    </h2>
+                    <h2>Question:{item.assignmentQuestion}</h2>
+                  </div>
+                  <div>
+                    <Link
+                      to="/attemptassignment"
+                      className="m-8 px-2 text-xl bg-white text-green-500 rounded-lg hover:scale-105 transition-transform duration-300"
+                    >
+                      Attempt
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-         
         </div>
         <div className=" p-2">
           <h1 className="text-green-500 text-2xl">Previous Assignments</h1>

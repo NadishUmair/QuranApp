@@ -82,9 +82,9 @@ const NavBar = () => {
               <li>
                 <Link to="/TeacherDashboard">Teacher Dashboard</Link>
               </li> */}
-              <li>
+              {/* <li>
                 <Link to="/admin">Admin Dashboard</Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
